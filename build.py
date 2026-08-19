@@ -49,7 +49,7 @@ INDEX_TEMPLATE = """<!DOCTYPE html>
 <body>
 <h1>Essays</h1>
 <div class="byline">by you</div>
-<p class="intro">A place to write down what I'm learning as I go — mostly about building things, personal finance, and figuring stuff out along the way.</p>
+<p class="intro">This is my 2nd brain which in short means a place for me to share and write down what I'm learning as I go — mostly about building things, personal finance, and figuring stuff out along the way in hopes it might help someone.</p>
 <ul class="essay-list">
 {items}
 </ul>
