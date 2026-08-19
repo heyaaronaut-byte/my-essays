@@ -57,3 +57,8 @@ h1 {
 p {
     margin-bottom: 18px;
 }
+
+.intro {
+    margin-bottom: 30px;
+    color: #333;
+}
