@@ -11,11 +11,18 @@ on:
 permissions:
   contents: write
 
+# One run at a time, so two quick publishes can't create the same Substack draft twice
+concurrency:
+  group: rebuild-site
+  cancel-in-progress: false
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}  # latest commit, including the previous run's updates
 
       - uses: actions/setup-python@v5
         with:
@@ -29,3 +36,18 @@ jobs:
         with:
           commit_message: "Rebuild site"
           file_pattern: "docs/**"
+
+      - name: Create Substack drafts for new essays
+        env:
+          SUBSTACK_COOKIE: ${{ secrets.SUBSTACK_COOKIE }}
+          SUBSTACK_PUBLICATION_URL: ${{ secrets.SUBSTACK_PUBLICATION_URL }}
+        run: |
+          pip install python-substack==0.8.0
+          python substack_sync.py
+
+      - name: Remember which essays have drafts
+        if: always()
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Record Substack drafts"
+          file_pattern: "substack_sent.json"
